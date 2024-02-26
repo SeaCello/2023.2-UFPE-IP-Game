@@ -8,4 +8,4 @@ Este é um jogo criado para a cadeira de Introdução a Programação do curso d
 - [@gui-rigaud](https://www.github.com/gui-rigaud)
 - [@h3ithor](https://www.github.com/h3ithor)
 - [@Ohashi1409](https://www.github.com/Ohashi1409)
-- [@Tiago](#)
+- [@tiagomhq](https://www.github.com/tiagomhq)
