@@ -1,22 +1,26 @@
+import pygame
+
+pygame.init()
+
 class player():
     def __init__(self):
         self.jumpSpeed = 2
         self.life = 1
+        self.player_posy = 400
+        self.player_posx = 420
 
-nico = player()
-print(nico)
+    def movimenta(self, dt):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w] or keys[pygame.K_SPACE]:
+            self.player_posy -= 10 * dt
+        if keys[pygame.K_s]:
+            self.player_posy += 10 * dt
+        if keys[pygame.K_a]:
+            self.player_posx -= 10 * dt
+        if keys[pygame.K_d]:
+            self.player_posx += 10 * dt
 
 # Renderizar sprite
 # Criar máscara de colisão 
 # Criar código de movimento do Player (fazer pulo referenciando jumpSpeed)
 # Referência
-# keys = pygame.key.get_pressed()
-    # if keys[pygame.K_w] or keys[pygame.K_SPACE]:
-        # player_pos.y -= 300 * dt
-    # if keys[pygame.K_s]:
-        # player_pos.y += 300 * dt
-    # if keys[pygame.K_a]:
-        # player_pos.x -= 300 * dt
-    # if keys[pygame.K_d]:
-        # player_pos.x += 300 * dt
-
