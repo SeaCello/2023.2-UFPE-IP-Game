@@ -2,7 +2,8 @@ import os
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 import pygame
-from nico import player
+from default import *
+from nico import Player
 
 # pygame setup
 pygame.init()
@@ -12,18 +13,6 @@ running = True
 dt = 0
 fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
 
-person_img = pygame.image.load('Projeto/assets/character.png')
-person = player()
-
-WIDTH = 1260
-HEIGHT = 720
-AMARELO = (255,255,0)
-PRETO = (0,0,0)
-VELOCIDADE = 10
-
-LARGURA_BLOCO = 800//20 #40 largura
-ALTURA_BLOCO = 600//20 #30 altura
-
 def load_crop_image(img, x, y, w, h, transform=True):
     img_original = img.subsurface((x,y),(w,h))
     if transform:
@@ -32,24 +21,28 @@ def load_crop_image(img, x, y, w, h, transform=True):
     else:
         return img_original
 
+heroi = Player()
+grupo_heroi = pygame.sprite.Group(heroi)
+personagem = pygame.image.load('Projeto/assets/character.png') 
+
 while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    pygame.display.flip()
+    screen.blit(fundo_img, (0, 0))
 
     dt = clock.tick(60) / 100
 
-    person.movimenta(dt)
+    # screen.blit(personagem, (heroi.player_posx, heroi.player_posy))
 
-    screen.blit(fundo_img, (0, 0))
+    # heroi.processar_evento(dt)
 
-    for c in range(0, 64, 16):
-        left = load_crop_image(person_img, c, 96, 16, 32, False)
-        left = pygame.transform.scale(left, (48,96))
+    grupo_heroi.update()
+    heroi.movimenta()
+    grupo_heroi.draw(screen)
 
-    screen.blit(left, (person.player_posx, person.player_posy))
+    pygame.display.flip()
 
 pygame.quit()
