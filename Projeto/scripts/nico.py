@@ -22,11 +22,9 @@ class Player(pygame.sprite.Sprite):
 
         self.jumpSpeed = 2
         self.life = 1
-        self.player_posy = 400
-        self.player_posx = 420
 
-        self.vel_x = 400
-        self.vel_y = 420
+        self.vel_x = 0
+        self.vel_y = 0
         self.images_down = []
         self.images_up = []
         self.images_left = []
@@ -64,24 +62,32 @@ class Player(pygame.sprite.Sprite):
             self.i = 0
         self.image = self.image_atual[int(self.i)]
 
-    def movimenta(self):
+    def movimenta(self, dt):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_SPACE]:
-            # self.vel_y = -dt
-            # self.vel_x = 0
+            self.vel_y = -dt
+            self.vel_x = 0
             self.image_atual = self.images_up
+            self.rect.x += 300 * self.vel_x
+            self.rect.y += 300 * self.vel_y
         if keys[pygame.K_s]:
-            # self.vel_y = dt
-            # self.vel_x = 0
+            self.vel_y = dt
+            self.vel_x = 0
             self.image_atual = self.images_down
+            self.rect.x += 300 * self.vel_x
+            self.rect.y += 300 * self.vel_y
         if keys[pygame.K_a]:
-            # self.vel_x = -dt
-            # self.vel_y = 0
+            self.vel_x = -dt
+            self.vel_y = 0
             self.image_atual = self.images_left
+            self.rect.x += 300 * self.vel_x
+            self.rect.y += 300 * self.vel_y
         if keys[pygame.K_d]:
-            # self.vel_x = dt
-            # self.vel_y = 0
+            self.vel_x = dt
+            self.vel_y = 0
             self.image_atual = self.images_right
+            self.rect.x += 300 * self.vel_x
+            self.rect.y += 300 * self.vel_y
 
 # Renderizar sprite
 # Criar máscara de colisão 
