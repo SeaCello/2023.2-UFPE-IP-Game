@@ -16,6 +16,7 @@ fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
 heroi = Player()
 grupo_heroi = pygame.sprite.Group(heroi)
 rect_heroi = heroi.rect
+rect_obst = pygame.Rect(400, 450, 60, 60)
 
 while running:
 
@@ -25,7 +26,14 @@ while running:
 
     screen.blit(fundo_img, (0, 0))
 
+    pygame.draw.rect(screen, (255, 255, 255), rect_obst)
+
     dt = clock.tick(60) / 1000
+
+    colidiu = pygame.Rect.colliderect(rect_heroi, rect_obst)
+
+    if colidiu:
+        heroi.colisao(rect_obst)
 
     # screen.blit(personagem, (heroi.player_posx, heroi.player_posy))
 

@@ -4,6 +4,8 @@ from pygame.locals import *
 
 from default import *
 
+from math import *
+
 pygame.init()
 
 def load_crop_image(img, x, y, w, h, transform=True):
@@ -55,6 +57,20 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.pos_y_inicial = 120 - 64 - 96//2
         self.rect.topleft = (100, 500) #368   416(centro y)
+    
+    def colisao(self, retangulo):
+
+        x_retangulo = retangulo.x
+        x_person = self.rect.x
+
+        distancia = x_retangulo - x_person
+
+        if distancia <= 0:
+            self.rect.x = x_retangulo
+            self.vel_x = 0
+        elif distancia <= (x_retangulo - retangulo.height):
+            self.rect.x = (x_retangulo - retangulo.height)
+
 
     def update(self):   
         self.i += 0.20
@@ -64,30 +80,31 @@ class Player(pygame.sprite.Sprite):
 
     def movimenta(self, dt):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w] or keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE]:
             self.vel_y = -dt
-            self.vel_x = 0
-            self.image_atual = self.images_up
-            self.rect.x += 300 * self.vel_x
-            self.rect.y += 300 * self.vel_y
-        if keys[pygame.K_s]:
-            self.vel_y = dt
-            self.vel_x = 0
-            self.image_atual = self.images_down
-            self.rect.x += 300 * self.vel_x
             self.rect.y += 300 * self.vel_y
         if keys[pygame.K_a]:
             self.vel_x = -dt
             self.vel_y = 0
             self.image_atual = self.images_left
-            self.rect.x += 300 * self.vel_x
-            self.rect.y += 300 * self.vel_y
+            if self.rect.x < 0:
+                self.rect.x = 0
+            elif self.rect.x > WIDTH - 32:
+                self.rect.x = WIDTH - 32
+            else:
+                self.rect.x += 300 * self.vel_x
+                self.rect.y += 300 * self.vel_y
         if keys[pygame.K_d]:
             self.vel_x = dt
             self.vel_y = 0
             self.image_atual = self.images_right
-            self.rect.x += 300 * self.vel_x
-            self.rect.y += 300 * self.vel_y
+            if self.rect.x < 0:
+                self.rect.x = 0
+            elif self.rect.x > WIDTH - 32:
+                self.rect.x = WIDTH - 32
+            else:
+                self.rect.x += 300 * self.vel_x
+                self.rect.y += 300 * self.vel_y
 
 # Renderizar sprite
 # Criar máscara de colisão 
