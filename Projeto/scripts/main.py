@@ -16,7 +16,7 @@ fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
 heroi = Player()
 grupo_heroi = pygame.sprite.Group(heroi)
 rect_heroi = heroi.rect
-rect_obst = pygame.Rect(400, 450, 60, 60)
+rect_obst = pygame.Rect(0, 650, WIDTH, 60)
 
 while running:
 
