@@ -18,6 +18,8 @@ def load_crop_image(img, x, y, w, h, transform=True):
 
 personagem = pygame.image.load('Projeto/assets/character.png')
 
+clock = pygame.time.Clock()
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -84,10 +86,15 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self):   
+
+        dt = clock.tick(60) / 1000
+
         self.i += 0.20
         if self.i >= len(self.images_down):
             self.i = 0
         self.image = self.image_atual[int(self.i)]
+
+        self.movimenta(dt)
 
         #Gravidade
         if self.vel_y < 10:
@@ -104,10 +111,10 @@ class Player(pygame.sprite.Sprite):
     def movimenta(self, dt):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            self.vel_y = -7
+            self.vel_y = -7*dt
             self.on_move = True
         if keys[pygame.K_a]:
-            self.vel_x = -10
+            self.vel_x = -10*dt
             self.image_atual = self.images_left
             if self.rect.x < 0:
                 self.rect.x = 0
@@ -115,7 +122,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x = WIDTH - 32
             self.on_move = True
         if keys[pygame.K_d]:
-            self.vel_x = 10
+            self.vel_x = 10*dt
             self.image_atual = self.images_right
             if self.rect.x < 0:
                 self.rect.x = 0
