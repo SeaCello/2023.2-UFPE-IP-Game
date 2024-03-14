@@ -41,8 +41,6 @@ while running:
 
     grupo_heroi.update()
 
-    heroi.movimenta(dt)
-
     grupo_heroi.draw(screen)
 
     pygame.display.flip()

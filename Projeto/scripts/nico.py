@@ -34,6 +34,7 @@ class Player(pygame.sprite.Sprite):
         self.images_up = []
         self.images_left = []
         self.images_right = []
+        self.images_jump_right = []
         self.image_atual = []
 
         for c in range(0, 64, 16):
@@ -52,7 +53,12 @@ class Player(pygame.sprite.Sprite):
             down = load_crop_image(personagem, c, 0, 16, 32, False)
             down = pygame.transform.scale(down, (48,96))
             self.images_down.append(down)
-    
+
+        for i in range(0, 160, 16):
+            jump_right = load_crop_image(personagem, i, 32, 16, 32, False)
+            jump_right = pygame.transform.scale(jump_right, (48,96))
+            self.images_jump_right.append(jump_right)
+
         self.i = 0
         self.image_atual = self.images_down
         self.image = self.images_down[self.i]
@@ -111,24 +117,27 @@ class Player(pygame.sprite.Sprite):
     def movimenta(self, dt):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            self.vel_y = -7*dt
+            self.vel_y = -7
+            self.image_atual = self.images_jump_right
             self.on_move = True
-        if keys[pygame.K_a]:
-            self.vel_x = -10*dt
+        elif keys[pygame.K_a]:
+            self.vel_x = -10
             self.image_atual = self.images_left
             if self.rect.x < 0:
                 self.rect.x = 0
             elif self.rect.x > WIDTH - 32:
                 self.rect.x = WIDTH - 32
             self.on_move = True
-        if keys[pygame.K_d]:
-            self.vel_x = 10*dt
+        elif keys[pygame.K_d]:
+            self.vel_x = 10
             self.image_atual = self.images_right
             if self.rect.x < 0:
                 self.rect.x = 0
             elif self.rect.x > WIDTH - 32:
                 self.rect.x = WIDTH - 32
             self.on_move = True
+        else:
+            self.image_atual = self.images_down
 
 # Renderizar sprite
 # Criar máscara de colisão 
