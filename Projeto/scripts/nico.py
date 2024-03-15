@@ -71,7 +71,7 @@ class Player(pygame.sprite.Sprite):
 
         x_retangulo = box.rect.x
         x_person = self.rect.x
-        y_retangulo = box.rect.y
+        y_retangulo = box.rect.center[1]
         y_person = self.rect.y
 
         # distanciax = x_retangulo - x_person
@@ -86,8 +86,10 @@ class Player(pygame.sprite.Sprite):
 
         if distanciay <= 0:
             self.rect.y = y_retangulo
-        elif distanciay <= (y_retangulo - box.rect.h):
-            self.rect.y = (y_retangulo - box.rect.h - 32)
+            self.vel_x = 0
+        elif distanciay <= (y_retangulo - 69):
+            self.rect.y = (y_retangulo - 69)
+            self.vel_x = 0
 
 
     def update(self, boxes):

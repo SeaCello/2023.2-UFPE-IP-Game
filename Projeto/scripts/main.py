@@ -5,7 +5,7 @@ import pygame
 from default import *
 from nico import Player
 import level
-from level import Platform
+from level import Platform, Ground
 
 # pygame setup
 pygame.init()
@@ -21,6 +21,8 @@ grupo_heroi = pygame.sprite.Group(heroi)
 blocks = pygame.sprite.Group()
 levelMap = level.levelDesign
 
+blocks.add(Ground(0, 600))
+
 while running:
 
     for event in pygame.event.get():
@@ -33,6 +35,7 @@ while running:
         for blockX in range(len(levelMap[blockY])):
             if(levelMap[blockY][blockX] == 1):            
                 blocks.add(Platform(blockX*32+300, blockY*32+500))
+    
     blocks.draw(screen)
 
     # pygame.draw.rect(screen, (255, 255, 255), rect_obst)

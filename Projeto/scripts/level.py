@@ -16,3 +16,18 @@ class Platform(pygame.sprite.Sprite):
     
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
+class Ground(pygame.sprite.Sprite):
+    def __init__(self, posX, posY):
+        super().__init__()
+        self.width = 500
+        self.height = 32
+        self.image = pygame.image.load("Projeto/assets/ground_temp.png").convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.center = [posX, posY]
+
+    def update(self):
+        pass
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
