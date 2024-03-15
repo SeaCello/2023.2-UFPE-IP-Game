@@ -67,11 +67,11 @@ class Player(pygame.sprite.Sprite):
         self.pos_y_inicial = 100 - 64 - 96//2
         self.rect.topleft = (100, 500) #368   416(centro y)
     
-    def colisao(self, retangulo):
+    def colisao(self, box):
 
-        x_retangulo = retangulo.x
+        x_retangulo = box.rect.x
         x_person = self.rect.x
-        y_retangulo = retangulo.y
+        y_retangulo = box.rect.y
         y_person = self.rect.y
 
         # distanciax = x_retangulo - x_person
@@ -80,18 +80,17 @@ class Player(pygame.sprite.Sprite):
         #     self.rect.x = x_retangulo
         #     self.vel_x = 0
         # elif distanciax <= (x_retangulo - retangulo.width):
-        #     self.rect.x = (x_retangulo - retangulo.width)
+        #     self.rect.x = (x_box.rect - box.rect.width)
 
         distanciay = y_retangulo - y_person
 
         if distanciay <= 0:
             self.rect.y = y_retangulo
-        elif distanciay <= (y_retangulo - retangulo.height):
-            self.rect.y = (y_retangulo - retangulo.height - 32)
+        elif distanciay <= (y_retangulo - box.rect.h):
+            self.rect.y = (y_retangulo - box.rect.h - 32)
 
 
-
-    def update(self):   
+    def update(self, boxes):
 
         dt = clock.tick(60) / 1000
 
@@ -99,6 +98,11 @@ class Player(pygame.sprite.Sprite):
         if self.i >= len(self.images_down):
             self.i = 0
         self.image = self.image_atual[int(self.i)]
+
+        colidiu = pygame.sprite.spritecollideany(self, boxes)
+
+        if colidiu:
+            self.colisao(colidiu)
 
         self.movimenta(dt)
 

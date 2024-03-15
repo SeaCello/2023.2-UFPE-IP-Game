@@ -4,6 +4,8 @@ os.environ['SDL_AUDIODRIVER'] = 'dsp'
 import pygame
 from default import *
 from nico import Player
+import level
+from level import Platform
 
 # pygame setup
 pygame.init()
@@ -15,8 +17,9 @@ fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
 
 heroi = Player()
 grupo_heroi = pygame.sprite.Group(heroi)
-rect_heroi = heroi.rect
-rect_obst = pygame.Rect(0, 650, WIDTH, 60)
+
+blocks = pygame.sprite.Group()
+levelMap = level.levelDesign
 
 while running:
 
@@ -26,20 +29,21 @@ while running:
 
     screen.blit(fundo_img, (0, 0))
 
-    pygame.draw.rect(screen, (255, 255, 255), rect_obst)
+    for blockY in range(len(levelMap)):
+        for blockX in range(len(levelMap[blockY])):
+            if(levelMap[blockY][blockX] == 1):            
+                blocks.add(Platform(blockX*32+300, blockY*32+500))
+    blocks.draw(screen)
+
+    # pygame.draw.rect(screen, (255, 255, 255), rect_obst)
 
     dt = clock.tick(60) / 1000
-
-    colidiu = pygame.Rect.colliderect(rect_heroi, rect_obst)
-
-    if colidiu:
-        heroi.colisao(rect_obst)
 
     # screen.blit(personagem, (heroi.player_posx, heroi.player_posy))
 
     # heroi.processar_evento(dt)
 
-    grupo_heroi.update()
+    grupo_heroi.update(blocks)
 
     grupo_heroi.draw(screen)
 
