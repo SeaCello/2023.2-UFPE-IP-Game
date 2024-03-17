@@ -5,11 +5,9 @@ import pygame
 from default import *
 from nico import Player
 import level
-from level import Platform, Ground
+from level import Platform
 from enemy import *
-from item import Life, Arrow, Powerup
-
-
+from item import *
 
 # pygame setup
 pygame.init()
@@ -18,8 +16,10 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
+
 heroi = Player()
 grupo_heroi = pygame.sprite.Group(heroi)
+
 enemy = Base_enemy(WIDTH, 100, 0)
 enemy2 = Base_enemy(WIDTH, 300, 0)
 grupo_enemies = pygame.sprite.Group()
@@ -70,10 +70,18 @@ while running:
 
     grupo_enemies.update(heroi.rect, grupo_bullet)
     grupo_enemies.draw(screen)            
-                
-    blocks.draw(screen)
+    
     pygame.display.flip()
 
-    dt = clock.tick(60) / 1000
+    grupo_bullet.update()
+    grupo_bullet.draw(screen)
+    
+    grupo_heroi.update(all_sprites_group)
+    grupo_heroi.draw(screen)
+
+    grupo_enemies.update(heroi.rect, grupo_bullet)
+    grupo_enemies.draw(screen)
+
+    pygame.display.flip()
 
 pygame.quit()
