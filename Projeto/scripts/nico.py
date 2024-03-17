@@ -7,6 +7,8 @@ from default import *
 
 from math import *
 
+from item import *
+
 pygame.init()
 
 def load_crop_image(img, x, y, w, h, transform=True):
@@ -25,10 +27,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
 
-        self.jumpSpeed = 2
-        self.life = 5
-        self.on_move = False
-
+        self.jumpSpeed = 1200
+        self.arrows = 0
+        self.life = 3
+        self.speed = 300
         self.vel_x = 0
         self.vel_y = 0
         self.images_down = []
@@ -66,33 +68,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.topleft = (100, 500)
-    
-    def colisao(self, box):
 
-        x_retangulo = box.rect.x
-        x_person = self.rect.x
-        y_retangulo = box.rect.y - box.rect.height
-        y_person = self.rect.y
-
-        # distanciax = x_retangulo - x_person
-
-        # if distanciax <= 0:
-        #     self.rect.x = x_retangulo
-        #     self.vel_x = 0
-        # elif distanciax <= (x_retangulo - retangulo.width):
-        #     self.rect.x = (x_box.rect - box.rect.width)
-
-        distanciay = y_retangulo - y_person
-
-        if distanciay <= 0:
-            self.rect.y = y_retangulo
-            self.vel_x = 0
-        elif distanciay <= y_retangulo:
-            self.rect.y = y_retangulo
-            self.vel_x = 0
-
-
-    def update(self, boxes):
+    def update(self, boxes, life, arrows, powerups):
 
         dt = clock.tick(60) / 1000
 
@@ -102,50 +79,52 @@ class Player(pygame.sprite.Sprite):
         self.image = self.image_atual[int(self.i)]
 
         colidiu = pygame.sprite.spritecollideany(self, boxes)
+        collisionLife = pygame.sprite.spritecollideany(self, life)
+        collisionArrows = pygame.sprite.spritecollideany(self, arrows)
+        collisionPowerups = pygame.sprite.spritecollideany(self, powerups)
 
-        if colidiu:
-            self.colisao(colidiu)
+        if collisionLife:
+            self.life += 1
+            collisionLife.kill()
+        if collisionArrows:
+            self.arrows += 1
+            collisionArrows.kill()
+        if collisionPowerups:
+            collisionPowerups.kill()
+
+        key = pygame.key.get_pressed()
+        if key[pygame.K_a]:
+            self.vel_x = -self.speed*dt 
+            self.image_atual = self.images_left
+        elif key[pygame.K_d]:
+            self.vel_x = self.speed*dt
+            self.image_atual = self.images_right
         else:
-            self.life = 0
-
-        self.movimenta(dt)
-
+            self.vel_x = 0
+            self.image_atual = [self.images_down[0], self.images_down[0], self.images_down[0], self.images_down[0]]
+        if key[pygame.K_SPACE] and colidiu:
+            self.vel_y = -self.jumpSpeed*dt
+            self.image_atual = self.images_jump_right
+        else:
+            self.image_atual = [self.images_down[0], self.images_down[0], self.images_down[0], self.images_down[0]]
+        
         #Gravidade
         if self.vel_y < 10:
             self.vel_y += 1
-            self.rect.y += self.vel_y
-
-        if self.on_move:
-            self.rect.x += self.vel_x
-            self.rect.y += self.vel_y
         
-        if self.rect.y == 568:
-            self.on_move = False
+        if colidiu and self.vel_y > 0 :
+            self.vel_y = 0
 
-    def movimenta(self, dt):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            self.vel_y = -300*dt
-            self.image_atual = self.images_jump_right
-            self.on_move = True
-        elif keys[pygame.K_a]:
-            self.vel_x = -100*dt
-            self.image_atual = self.images_left
-            if self.rect.x < 0:
+        self.movimenta(self.vel_x,self.vel_y)
+
+    def movimenta(self, x, y):  
+        self.rect.move_ip([x,y])
+        if self.rect.x < 0:
                 self.rect.x = 0
-            elif self.rect.x > WIDTH - 32:
+        elif self.rect.x > WIDTH - 32:
                 self.rect.x = WIDTH - 32
-            self.on_move = True
-        elif keys[pygame.K_d]:
-            self.vel_x = 100*dt
-            self.image_atual = self.images_right
-            if self.rect.x < 0:
-                self.rect.x = 0
-            elif self.rect.x > WIDTH - 32:
-                self.rect.x = WIDTH - 32
-            self.on_move = True
-        else:
-            self.image_atual = [self.images_down[0], self.images_down[0], self.images_down[0], self.images_down[0]]
+        
+            
 
 # Renderizar sprite
 # Criar máscara de colisão 

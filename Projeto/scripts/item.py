@@ -1,18 +1,13 @@
-# Criar classe de inimigo
-# Inicializar valores
-# Renderizar sprite
-# Definir máscara de colisão
-# Definir poder de cada item e jogar em nico.py
 import pygame
 
-class Life():
+class Life(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
+        super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("2023.2-UFPE-IP-Game/Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
-        self.life = 1
     
     def update(self):
         pass
@@ -20,14 +15,14 @@ class Life():
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-class Arrow():
+class Arrow(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
+        super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("2023.2-UFPE-IP-Game/Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
-        self.life = 1
     
     def update(self):
         pass
@@ -35,14 +30,14 @@ class Arrow():
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-class Powerup():
+class Powerup(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
+        super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("2023.2-UFPE-IP-Game/Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
-        self.life = 1
     
     def update(self):
         pass

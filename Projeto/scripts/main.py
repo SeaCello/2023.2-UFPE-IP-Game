@@ -1,6 +1,8 @@
 import os
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
+
+
 import pygame
 from default import *
 from nico import Player
@@ -11,6 +13,7 @@ from item import *
 
 # pygame setup
 pygame.init()
+font = pygame.font.SysFont("arial", 30, True)
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
@@ -49,7 +52,6 @@ for blockY in range(len(levelMap)):
             elif(levelMap[blockY][blockX] == 4):
                 powerups.add(Powerup(blockX*32+16, blockY*32+16))
 
-all_sprites_group.add(blocks)
 
 while running:
 
@@ -59,28 +61,31 @@ while running:
     
     screen.blit(fundo_img, (0, 0))
     
-    all_sprites_group.update()
-    all_sprites_group.draw(screen)
+    blocks.update()
+    blocks.draw(screen)
+    
+    life.update()
+    life.draw(screen)
+
+    arrows.update()
+    arrows.draw(screen)
+
+    powerups.update()
+    powerups.draw(screen)
     
     grupo_bullet.update()
     grupo_bullet.draw(screen)
     
-    grupo_heroi.update(all_sprites_group)
+    grupo_heroi.update(blocks, life, arrows, powerups)
     grupo_heroi.draw(screen)
 
     grupo_enemies.update(heroi.rect, grupo_bullet)
     grupo_enemies.draw(screen)            
-    
-    pygame.display.flip()
 
-    grupo_bullet.update()
-    grupo_bullet.draw(screen)
-    
-    grupo_heroi.update(all_sprites_group)
-    grupo_heroi.draw(screen)
-
-    grupo_enemies.update(heroi.rect, grupo_bullet)
-    grupo_enemies.draw(screen)
+    textLife = font.render("Vida: " + str(heroi.life), 1, (0,0,0))
+    textArrows = font.render("Flechas: " + str(heroi.arrows), 1, (0,0,0))
+    screen.blit(textLife, (0, 10))
+    screen.blit(textArrows, (0, 40))
 
     pygame.display.flip()
 
