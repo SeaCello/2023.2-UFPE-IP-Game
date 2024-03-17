@@ -6,6 +6,7 @@ from default import *
 from nico import Player
 import level
 from level import Platform, Ground
+from enemy import *
 
 # pygame setup
 pygame.init()
@@ -18,10 +19,26 @@ fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
 heroi = Player()
 grupo_heroi = pygame.sprite.Group(heroi)
 
+enemy = Base_enemy(WIDTH, 100, 0)
+enemy2 = Base_enemy(WIDTH, 300, 0)
+grupo_enemies = pygame.sprite.Group()
+grupo_enemies.add(enemy)
+# grupo_enemies.add(enemy2)
+
+bullet = Bullet(500, 70, 45)
+grupo_bullet = pygame.sprite.Group()
+grupo_bullet.add(bullet)
+
 blocks = pygame.sprite.Group()
 levelMap = level.levelDesign
 
-blocks.add(Ground(0, 600))
+blocks.add(Ground(0, 720))
+blocks.add(Ground(900, 720))
+blocks.add(Platform(500, 500))
+blocks.add(Platform(532, 500))
+
+all_sprites_group = pygame.sprite.Group()
+all_sprites_group.add(blocks)
 
 while running:
 
@@ -31,24 +48,17 @@ while running:
 
     screen.blit(fundo_img, (0, 0))
 
-    for blockY in range(len(levelMap)):
-        for blockX in range(len(levelMap[blockY])):
-            if(levelMap[blockY][blockX] == 1):            
-                blocks.add(Platform(blockX*32+300, blockY*32+500))
+    all_sprites_group.update()
+    all_sprites_group.draw(screen)
+
+    grupo_bullet.update()
+    grupo_bullet.draw(screen)
     
-    blocks.draw(screen)
-
-    # pygame.draw.rect(screen, (255, 255, 255), rect_obst)
-
-    dt = clock.tick(60) / 1000
-
-    # screen.blit(personagem, (heroi.player_posx, heroi.player_posy))
-
-    # heroi.processar_evento(dt)
-
-    grupo_heroi.update(blocks)
-
+    grupo_heroi.update(all_sprites_group)
     grupo_heroi.draw(screen)
+
+    grupo_enemies.update(heroi.rect, grupo_bullet)
+    grupo_enemies.draw(screen)
 
     pygame.display.flip()
 

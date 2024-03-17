@@ -7,7 +7,7 @@ class Platform(pygame.sprite.Sprite):
         super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/pixil-frame-0.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
 
@@ -20,9 +20,9 @@ class Platform(pygame.sprite.Sprite):
 class Ground(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
         super().__init__()
-        self.width = 500
+        self.width = 700
         self.height = 32
-        self.image = pygame.image.load("Projeto/assets/ground_temp.png").convert_alpha()
+        self.image = pygame.image.load("Projeto/assets/pixil-frame-0 (2).png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
 

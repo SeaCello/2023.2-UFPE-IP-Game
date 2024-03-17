@@ -1,3 +1,4 @@
+import time
 import pygame
 
 from pygame.locals import *
@@ -25,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.jumpSpeed = 2
-        self.life = 1
+        self.life = 5
         self.on_move = False
 
         self.vel_x = 0
@@ -64,14 +65,13 @@ class Player(pygame.sprite.Sprite):
         self.image = self.images_down[self.i]
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.pos_y_inicial = 100 - 64 - 96//2
-        self.rect.topleft = (100, 500) #368   416(centro y)
+        self.rect.topleft = (100, 500)
     
     def colisao(self, box):
 
         x_retangulo = box.rect.x
         x_person = self.rect.x
-        y_retangulo = box.rect.center[1]
+        y_retangulo = box.rect.y - box.rect.height
         y_person = self.rect.y
 
         # distanciax = x_retangulo - x_person
@@ -87,8 +87,8 @@ class Player(pygame.sprite.Sprite):
         if distanciay <= 0:
             self.rect.y = y_retangulo
             self.vel_x = 0
-        elif distanciay <= (y_retangulo - 69):
-            self.rect.y = (y_retangulo - 69)
+        elif distanciay <= y_retangulo:
+            self.rect.y = y_retangulo
             self.vel_x = 0
 
 
@@ -105,6 +105,8 @@ class Player(pygame.sprite.Sprite):
 
         if colidiu:
             self.colisao(colidiu)
+        else:
+            self.life = 0
 
         self.movimenta(dt)
 
@@ -123,11 +125,11 @@ class Player(pygame.sprite.Sprite):
     def movimenta(self, dt):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            self.vel_y = -7
+            self.vel_y = -300*dt
             self.image_atual = self.images_jump_right
             self.on_move = True
         elif keys[pygame.K_a]:
-            self.vel_x = -10
+            self.vel_x = -100*dt
             self.image_atual = self.images_left
             if self.rect.x < 0:
                 self.rect.x = 0
@@ -135,7 +137,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x = WIDTH - 32
             self.on_move = True
         elif keys[pygame.K_d]:
-            self.vel_x = 10
+            self.vel_x = 100*dt
             self.image_atual = self.images_right
             if self.rect.x < 0:
                 self.rect.x = 0
@@ -143,7 +145,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x = WIDTH - 32
             self.on_move = True
         else:
-            self.image_atual = self.images_down
+            self.image_atual = [self.images_down[0], self.images_down[0], self.images_down[0], self.images_down[0]]
 
 # Renderizar sprite
 # Criar máscara de colisão 
