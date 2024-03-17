@@ -7,6 +7,10 @@ from default import *
 
 from math import *
 
+from level import *
+
+from enemy import *
+
 pygame.init()
 
 def load_crop_image(img, x, y, w, h, transform=True):
@@ -26,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.jumpSpeed = 2
-        self.life = 5
+        self.life = 100
         self.on_move = False
 
         self.vel_x = 0
@@ -68,29 +72,31 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (100, 500)
     
     def colisao(self, box):
+        
+        if box.__class__ is Platform or box.__class__ is Ground:
+            x_retangulo = box.rect.x
+            x_person = self.rect.x
+            y_retangulo = box.rect.y - box.rect.height
+            y_person = self.rect.y
 
-        x_retangulo = box.rect.x
-        x_person = self.rect.x
-        y_retangulo = box.rect.y - box.rect.height
-        y_person = self.rect.y
+            # distanciax = x_retangulo - x_person
 
-        # distanciax = x_retangulo - x_person
+            # if distanciax <= 0:
+            #     self.rect.x = x_retangulo
+            #     self.vel_x = 0
+            # elif distanciax <= (x_retangulo - retangulo.width):
+            #     self.rect.x = (x_box.rect - box.rect.width)
 
-        # if distanciax <= 0:
-        #     self.rect.x = x_retangulo
-        #     self.vel_x = 0
-        # elif distanciax <= (x_retangulo - retangulo.width):
-        #     self.rect.x = (x_box.rect - box.rect.width)
+            distanciay = y_retangulo - y_person
 
-        distanciay = y_retangulo - y_person
-
-        if distanciay <= 0:
-            self.rect.y = y_retangulo
-            self.vel_x = 0
-        elif distanciay <= y_retangulo:
-            self.rect.y = y_retangulo
-            self.vel_x = 0
-
+            if distanciay <= 0:
+                self.rect.y = y_retangulo
+                self.vel_x = 0
+            elif distanciay <= y_retangulo:
+                self.rect.y = y_retangulo
+                self.vel_x = 0
+        elif box.__class__ is Base_enemy:
+            self.life -= 1
 
     def update(self, boxes):
 
@@ -105,15 +111,16 @@ class Player(pygame.sprite.Sprite):
 
         if colidiu:
             self.colisao(colidiu)
-        else:
-            self.life = 0
 
         self.movimenta(dt)
 
         #Gravidade
         if self.vel_y < 10:
-            self.vel_y += 1
-            self.rect.y += self.vel_y
+            if self.rect.y <= 720 and self.rect.y >= 0:
+                self.vel_y += 1
+                self.rect.y += self.vel_y
+            else:
+                self.life = 0
 
         if self.on_move:
             self.rect.x += self.vel_x

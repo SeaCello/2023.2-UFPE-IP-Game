@@ -39,6 +39,9 @@ blocks.add(Platform(532, 500))
 
 all_sprites_group = pygame.sprite.Group()
 all_sprites_group.add(blocks)
+all_sprites_group.add(grupo_enemies)
+
+font = pygame.font.SysFont("comicsans", 30, True)
 
 while running:
 
@@ -50,6 +53,9 @@ while running:
 
     all_sprites_group.update()
     all_sprites_group.draw(screen)
+    
+    text = font.render("Life: " + str(heroi.life), 1, (0,0,0))
+    screen.blit(text, (0, 35))
 
     grupo_bullet.update()
     grupo_bullet.draw(screen)
@@ -57,9 +63,9 @@ while running:
     grupo_heroi.update(all_sprites_group)
     grupo_heroi.draw(screen)
 
-    grupo_enemies.update(heroi.rect, grupo_bullet)
-    grupo_enemies.draw(screen)
-
     pygame.display.flip()
+
+    if heroi.life == 0:
+        running = False
 
 pygame.quit()

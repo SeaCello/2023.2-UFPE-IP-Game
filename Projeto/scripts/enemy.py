@@ -65,7 +65,7 @@ class Base_enemy(pygame.sprite.Sprite):
         self.pos_y_inicial = y
         self.rect.topleft = (x, y)
     
-    def update(self, person_rect, grupo_bullet):
+    def update(self):
         self.i += 0.20
         if self.i >= len(self.images_left):
             self.i = 0
@@ -76,7 +76,7 @@ class Base_enemy(pygame.sprite.Sprite):
 
         self.image = self.image_atual[int(self.i)]
 
-        x = threading.Thread(target=self.movement, args=(person_rect,grupo_bullet,))
+        x = threading.Thread(target=self.movement)
         x.start()
 
         # self.colisao()
@@ -85,7 +85,7 @@ class Base_enemy(pygame.sprite.Sprite):
             self.shoot_cooldown -= 1
     
     # Definir moviment
-    def movement(self, person_rect, grupo_bullet):
+    def movement(self):
         x = self.rect.x
         x_change = self.x_change
 
@@ -98,7 +98,6 @@ class Base_enemy(pygame.sprite.Sprite):
             cont.append(1)
         elif (x == 1000) and (len(cont) > 0):
             self.image_atual = self.images_left
-            self.shoot(person_rect, grupo_bullet)
             time.sleep(2)
         elif x == 100 :
             self.image_atual = self.images_right
@@ -121,15 +120,15 @@ class Base_enemy(pygame.sprite.Sprite):
     #     return collided
     
     #Função que realiza o tiro da coruja com base na sua posição e na do personagem
-    def shoot(self, person_rect, grupo_bullet):
-        cateto_x = abs(self.rect.x - person_rect.x)
-        cateto_y = abs(self.rect.y - person_rect.y)
-        if cateto_x != 0:
-            tangente = cateto_y / cateto_x
-            angle = math.atan(tangente)*360/math.pi
-        else:
-            angle = 0
-        grupo_bullet.add(Bullet(self.rect.x, self.rect.y, angle))
+    # def shoot(self, person_rect, grupo_bullet):
+    #     cateto_x = abs(self.rect.x - person_rect.x)
+    #     cateto_y = abs(self.rect.y - person_rect.y)
+    #     if cateto_x != 0:
+    #         tangente = cateto_y / cateto_x
+    #         angle = math.atan(tangente)*360/math.pi
+    #     else:
+    #         angle = 0
+    #     grupo_bullet.add(Bullet(self.rect.x, self.rect.y, angle))
 
 
 #definindo classe do tiro da coruja 
