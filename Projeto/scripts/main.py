@@ -5,8 +5,9 @@ import pygame
 from default import *
 from nico import Player
 import level
-from level import Platform, Ground
+from level import Platform
 from enemy import *
+from item import *
 
 # pygame setup
 pygame.init()

@@ -30,7 +30,7 @@ class Platform(pygame.sprite.Sprite):
         super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("2023.2-UFPE-IP-Game/Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
 
