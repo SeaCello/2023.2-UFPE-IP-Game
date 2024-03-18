@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):
             self.life += 1
             collisionLife.kill()
         if collisionArrows:
-            self.arrows += 1
+            self.arrows += 3
             collisionArrows.kill()
         if collisionPowerups:
             collisionPowerups.kill()

@@ -85,15 +85,15 @@ class game():
             
             grupo_arrows.update()
             grupo_arrows.draw(screen)
-
-            grupo_bullet.update()
-            grupo_bullet.draw(screen)
             
             grupo_heroi.update(blocks, life, arrows, powerups, grupo_arrows)
             grupo_heroi.draw(screen)
 
-            grupo_enemies.update(heroi.rect, grupo_bullet)
-            grupo_enemies.draw(screen)            
+            grupo_enemies.update(grupo_bullet, grupo_arrows)
+            grupo_enemies.draw(screen)
+
+            grupo_bullet.update()
+            grupo_bullet.draw(screen)
 
             textLife = font.render("Vida: " + str(heroi.life), 1, (0,0,0))
             textArrows = font.render("Flechas: " + str(heroi.arrows), 1, (0,0,0))

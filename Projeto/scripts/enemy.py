@@ -66,7 +66,7 @@ class Base_enemy(pygame.sprite.Sprite):
         self.pos_y_inicial = y
         self.rect.topleft = (x, y)
     
-    def update(self, person_rect, grupo_bullet):
+    def update(self, grupo_bullet, arrows):
         self.i += 0.20
         if self.i >= len(self.images_left):
             self.i = 0
@@ -77,16 +77,22 @@ class Base_enemy(pygame.sprite.Sprite):
 
         self.image = self.image_atual[int(self.i)]
 
-        x = threading.Thread(target=self.movement, args=(person_rect,grupo_bullet,))
+        collided = pygame.sprite.spritecollideany(self, arrows)
+
+        if collided:
+            self.life -= 1
+            self.kill()
+
+        x = threading.Thread(target=self.movement, args=(grupo_bullet,))
         x.start()
 
-        # self.colisao()
+        # self.colisao(arrows)
 
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
     
     # Definir moviment
-    def movement(self, person_rect, grupo_bullet):
+    def movement(self, grupo_bullet):
         x = self.rect.x
         x_change = self.x_change
 
@@ -97,9 +103,8 @@ class Base_enemy(pygame.sprite.Sprite):
 
         if (x == 1000) and (len(cont) == 0):
             cont.append(1)
-        elif (x == 1000 or x == 100) and (len(cont) > 0):
+        elif (x == 1000) and (len(cont) > 0):
             self.image_atual = self.images_left
-            self.shoot(person_rect, grupo_bullet)
             time.sleep(2)
         elif x == 100 :
             self.image_atual = self.images_right
@@ -111,27 +116,27 @@ class Base_enemy(pygame.sprite.Sprite):
         self.x_change = x_change
 
     #definindo colisao
-    # def colisao(self):
-    #     collided = False
+    # def colisao(self, arrows):
+    #     collided = pygame.sprite.spritecollideany(self, arrows)
 
-    #     if pygame.sprite.spritecollide(enemy_img, bullet_image, True):
+    #     if collided:
     #         self.life -= 1
-    #         collided = True
     #         time.sleep(1)
 
     #     return collided
     
-    #Função que realiza o tiro da coruja com base na sua posição e na do personagem
-    def shoot(self, person_rect, grupo_bullet):
-        cateto_x = abs(self.rect.x - person_rect.x)
-        cateto_y = abs(self.rect.y - person_rect.y)
-        if cateto_x != 0:
-            tangente = cateto_y / cateto_x
-            angle = math.atan(tangente)*360/math.pi
-        else:
-            angle = 0
-        angle += random.randrange(-10, 10)
-        grupo_bullet.add(Bullet(self.rect.x, self.rect.y, angle))
+    # #Função que realiza o tiro da coruja com base na sua posição e na do personagem
+    # def shoot(self, person_rect):
+    #     cateto_x = abs(self.rect.x - person_rect.x)
+    #     cateto_y = abs(self.rect.y - person_rect.y)
+    #     if cateto_x != 0:
+    #         tangente = cateto_y / cateto_x
+    #         angle = math.atan(tangente)*360/math.pi
+    #     else:
+    #         angle = 0
+    #     angle += random.randrange(-10, 10)
+    #     self.municao = 2
+    #     return angle
 
 
 #definindo classe do tiro da coruja 
