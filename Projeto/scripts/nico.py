@@ -46,24 +46,24 @@ class Player(pygame.sprite.Sprite):
         self.cooldownPower = 5000
 
         for c in range(0, 64, 16):
-            left = load_crop_image(personagem, c, 96, 16, 32, False)
-            left = pygame.transform.scale(left, (48,96))
+            left = load_crop_image(personagem, c, 96, 16, 20, False)
+            left = pygame.transform.scale(left, (48, 72))
             self.images_left.append(left)
             
-            up = load_crop_image(personagem, c, 64, 16, 32, False)
-            up = pygame.transform.scale(up, (48,96))
+            up = load_crop_image(personagem, c, 64, 16, 20, False)
+            up = pygame.transform.scale(up, (48,72))
             self.images_up.append(up)
             
-            right = load_crop_image(personagem, c, 32, 16, 32, False)
-            right = pygame.transform.scale(right, (48,96))
+            right = load_crop_image(personagem, c, 32, 16, 20, False)
+            right = pygame.transform.scale(right, (48,72))
             self.images_right.append(right)
             
-            down = load_crop_image(personagem, c, 0, 16, 32, False)
-            down = pygame.transform.scale(down, (48,96))
+            down = load_crop_image(personagem, c, 0, 16, 20, False)
+            down = pygame.transform.scale(down, (48,72))
             self.images_down.append(down)
 
         for i in range(0, 160, 16):
-            jump_right = load_crop_image(personagem, i, 32, 16, 32, False)
+            jump_right = load_crop_image(personagem, i, 32, 16, 30, False)
             jump_right = pygame.transform.scale(jump_right, (48,96))
             self.images_jump_right.append(jump_right)
 
@@ -177,8 +177,11 @@ class arrowShot(pygame.sprite.Sprite):
         self.y_vel = 0
         self.speed = 10
     
-    def update(self):
+    def update(self, ground):
         self.rect.move_ip([0, -self.speed])
+        collisionGround = pygame.sprite.spritecollideany(self, ground)
+        if collisionGround:
+            self.kill()
     
     def draw(self, screen):
         screen.blit(self.image, self.rect)

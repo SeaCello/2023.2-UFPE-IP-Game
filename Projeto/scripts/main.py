@@ -83,7 +83,7 @@ class game():
             powerups.update()
             powerups.draw(screen)
             
-            grupo_arrows.update()
+            grupo_arrows.update(blocks)
             grupo_arrows.draw(screen)
             
             grupo_heroi.update(blocks, life, arrows, powerups, grupo_arrows)
