@@ -93,6 +93,11 @@ class Player(pygame.sprite.Sprite):
             collisionPowerups.kill()
 
         key = pygame.key.get_pressed()
+
+        if key[pygame.K_SPACE] and colidiu:
+            self.vel_y = -self.jumpSpeed*dt
+            self.image_atual = self.images_jump_right
+
         if key[pygame.K_a]:
             self.vel_x = -self.speed*dt 
             self.image_atual = self.images_left
@@ -101,11 +106,6 @@ class Player(pygame.sprite.Sprite):
             self.image_atual = self.images_right
         else:
             self.vel_x = 0
-            self.image_atual = [self.images_down[0], self.images_down[0], self.images_down[0], self.images_down[0]]
-        if key[pygame.K_SPACE] and colidiu:
-            self.vel_y = -self.jumpSpeed*dt
-            self.image_atual = self.images_jump_right
-        else:
             self.image_atual = [self.images_down[0], self.images_down[0], self.images_down[0], self.images_down[0]]
         
         #Gravidade
@@ -124,8 +124,6 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.x > WIDTH - 32:
                 self.rect.x = WIDTH - 32
         
-            
-
 # Renderizar sprite
 # Criar máscara de colisão 
 # Criar código de movimento do Player (fazer pulo referenciando jumpSpeed)
