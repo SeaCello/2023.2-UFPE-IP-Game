@@ -5,7 +5,7 @@ class Life(pygame.sprite.Sprite):
         super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/life.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
     
@@ -20,7 +20,7 @@ class Arrow(pygame.sprite.Sprite):
         super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/arrows.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
     
@@ -35,7 +35,7 @@ class Powerup(pygame.sprite.Sprite):
         super().__init__()
         self.width = 32
         self.height = 32
-        self.image = pygame.image.load("Projeto/assets/platform_temp.png")
+        self.image = pygame.image.load("Projeto/assets/powerup.png")
         self.rect = self.image.get_rect()
         self.rect.center = [posX, posY]
     

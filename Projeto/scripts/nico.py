@@ -1,6 +1,6 @@
 import time
 import pygame
-
+import numpy
 from pygame.locals import *
 
 from default import *
@@ -69,7 +69,7 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.topleft = (100, 500)
 
-    def update(self, boxes, life, arrows, powerups):
+    def update(self, boxes, life, arrows, powerups, grupo_arrows):
 
         dt = clock.tick(60) / 1000
 
@@ -78,7 +78,7 @@ class Player(pygame.sprite.Sprite):
             self.i = 0
         self.image = self.image_atual[int(self.i)]
 
-        colidiu = pygame.sprite.spritecollideany(self, boxes)
+        colidiu = self.check_ground_collision(0, 1, boxes)
         collisionLife = pygame.sprite.spritecollideany(self, life)
         collisionArrows = pygame.sprite.spritecollideany(self, arrows)
         collisionPowerups = pygame.sprite.spritecollideany(self, powerups)
@@ -94,10 +94,12 @@ class Player(pygame.sprite.Sprite):
 
         key = pygame.key.get_pressed()
 
-        if key[pygame.K_SPACE] and colidiu:
+        if key[pygame.K_w] and colidiu:
             self.vel_y = -self.jumpSpeed*dt
             self.image_atual = self.images_jump_right
-
+        if key[pygame.K_SPACE] and self.arrows > 0:
+            self.arrows -= 1
+            self.shootArrows(grupo_arrows)
         if key[pygame.K_a]:
             self.vel_x = -self.speed*dt 
             self.image_atual = self.images_left
@@ -115,16 +117,48 @@ class Player(pygame.sprite.Sprite):
         if colidiu and self.vel_y > 0 :
             self.vel_y = 0
 
-        self.movimenta(self.vel_x,self.vel_y)
+        self.movimenta(self.vel_x, self.vel_y, boxes)
+    
+    def shootArrows(self, grupo_arrows):
+        grupo_arrows.add(arrowShot(self.rect.x, self.rect.y))
+        
 
-    def movimenta(self, x, y):  
+    def check_ground_collision(self, x, y, boxes):
+        self.rect.move_ip([x,y])
+        collide = pygame.sprite.spritecollideany(self, boxes)
+        self.rect.move_ip([-x,-y])
+        return collide
+
+    def movimenta(self, x, y, boxes):
+        while self.check_ground_collision(0, y, boxes):
+            y -= numpy.sign(y)  
+        while self.check_ground_collision(x, y, boxes):
+            x -= numpy.sign(x)
         self.rect.move_ip([x,y])
         if self.rect.x < 0:
                 self.rect.x = 0
         elif self.rect.x > WIDTH - 32:
                 self.rect.x = WIDTH - 32
-        
-# Renderizar sprite
-# Criar máscara de colisão 
-# Criar código de movimento do Player (fazer pulo referenciando jumpSpeed)
-# Referência
+
+arrowShotImage = pygame.image.load('Projeto/assets/arrowShot.png')
+class arrowShot(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        pygame.sprite.Sprite.__init__(self)
+        self.x = x
+        self.y = y
+        self.image = arrowShotImage
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.x_vel = 0
+        self.y_vel = 0
+        self.speed = 10
+    
+    def update(self):
+        self.rect.move_ip([0, -self.speed])
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+

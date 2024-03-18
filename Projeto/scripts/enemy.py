@@ -5,6 +5,7 @@ from default import *
 import threading
 import time
 import math
+import random
 
 pygame.init()
 
@@ -96,7 +97,7 @@ class Base_enemy(pygame.sprite.Sprite):
 
         if (x == 1000) and (len(cont) == 0):
             cont.append(1)
-        elif (x == 1000) and (len(cont) > 0):
+        elif (x == 1000 or x == 100) and (len(cont) > 0):
             self.image_atual = self.images_left
             self.shoot(person_rect, grupo_bullet)
             time.sleep(2)
@@ -129,6 +130,7 @@ class Base_enemy(pygame.sprite.Sprite):
             angle = math.atan(tangente)*360/math.pi
         else:
             angle = 0
+        angle += random.randrange(-10, 10)
         grupo_bullet.add(Bullet(self.rect.x, self.rect.y, angle))
 
 

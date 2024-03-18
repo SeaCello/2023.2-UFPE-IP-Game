@@ -3,15 +3,15 @@ os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 import pygame
 from default import *
-from nico import Player
+from nico import *
 import level
-from level import Platform
+from level import *
 from enemy import *
 from item import *
 
 # pygame setup
 pygame.init()
-font = pygame.font.SysFont("arial", 30, True)
+font = pygame.font.Font("Projeto/assets/font.ttf", 30)
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 dt = 0
@@ -25,9 +25,13 @@ enemy2 = Base_enemy(WIDTH, 300, 0)
 grupo_enemies = pygame.sprite.Group()
 grupo_enemies.add(enemy)
 
-bullet = Bullet(500, 70, 45)
+bullet = Bullet(1000, 70, 45)
 grupo_bullet = pygame.sprite.Group()
 grupo_bullet.add(bullet)
+
+arrow = arrowShot(1280, 720)
+grupo_arrows = pygame.sprite.Group()
+grupo_arrows.add(arrow)
 
 blocks = pygame.sprite.Group()
 levelMap = level.levelDesign
@@ -79,10 +83,13 @@ class game():
             powerups.update()
             powerups.draw(screen)
             
+            grupo_arrows.update()
+            grupo_arrows.draw(screen)
+
             grupo_bullet.update()
             grupo_bullet.draw(screen)
             
-            grupo_heroi.update(blocks, life, arrows, powerups)
+            grupo_heroi.update(blocks, life, arrows, powerups, grupo_arrows)
             grupo_heroi.draw(screen)
 
             grupo_enemies.update(heroi.rect, grupo_bullet)
@@ -90,8 +97,8 @@ class game():
 
             textLife = font.render("Vida: " + str(heroi.life), 1, (0,0,0))
             textArrows = font.render("Flechas: " + str(heroi.arrows), 1, (0,0,0))
-            screen.blit(textLife, (0, 10))
-            screen.blit(textArrows, (0, 40))
+            screen.blit(textLife, (10, 10))
+            screen.blit(textArrows, (10, 40))
 
             pygame.display.flip()
 
