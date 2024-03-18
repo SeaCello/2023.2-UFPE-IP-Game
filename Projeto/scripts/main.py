@@ -63,6 +63,9 @@ class game():
         
         pygame.display.set_caption("Uma Jornada Discreta")
 
+        last = 0
+        cooldown = 20000
+
         while self.running:
 
             for event in pygame.event.get():
@@ -74,13 +77,13 @@ class game():
             blocks.update()
             blocks.draw(screen)
             
-            life.update()
+            life.update(blocks)
             life.draw(screen)
 
-            arrows.update()
+            arrows.update(blocks)
             arrows.draw(screen)
 
-            powerups.update()
+            powerups.update(blocks)
             powerups.draw(screen)
             
             grupo_arrows.update(blocks)
@@ -99,6 +102,17 @@ class game():
             textArrows = font.render("Flechas: " + str(heroi.arrows), 1, (0,0,0))
             screen.blit(textLife, (10, 10))
             screen.blit(textArrows, (10, 40))
+
+            now = pygame.time.get_ticks()
+            if now - last >= cooldown:
+                last = now
+                picked = random.randint(1,3)
+                if picked == 1:
+                    life.add(Life(100, 100))
+                elif picked == 2:
+                    arrows.add(Arrow(100, 100))
+                elif picked == 3:
+                    powerups.add(Powerup(100,100))
 
             pygame.display.flip()
 
