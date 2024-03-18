@@ -39,6 +39,11 @@ class Player(pygame.sprite.Sprite):
         self.images_right = []
         self.images_jump_right = []
         self.image_atual = []
+        self.cooldownArrow = 300 
+        self.lastArrow = 0
+        self.powered = False
+        self.lastPower = 0
+        self.cooldownPower = 5000
 
         for c in range(0, 64, 16):
             left = load_crop_image(personagem, c, 96, 16, 32, False)
@@ -87,10 +92,18 @@ class Player(pygame.sprite.Sprite):
             self.life += 1
             collisionLife.kill()
         if collisionArrows:
-            self.arrows += 3
+            self.arrows += 100
             collisionArrows.kill()
         if collisionPowerups:
+            self.powered = True
+            self.lastPower = pygame.time.get_ticks()
             collisionPowerups.kill()
+        
+        if self.powered:
+            nowPower = pygame.time.get_ticks()
+            if nowPower - self.lastPower >= self.cooldownPower:
+                self.last = nowPower
+                self.powered = False
 
         key = pygame.key.get_pressed()
 
@@ -98,8 +111,11 @@ class Player(pygame.sprite.Sprite):
             self.vel_y = -self.jumpSpeed*dt
             self.image_atual = self.images_jump_right
         if key[pygame.K_SPACE] and self.arrows > 0:
-            self.arrows -= 1
-            self.shootArrows(grupo_arrows)
+            nowArrow = pygame.time.get_ticks()
+            if nowArrow - self.lastArrow >= self.cooldownArrow:
+                self.lastArrow = nowArrow
+                self.arrows -= 1
+                self.shootArrows(grupo_arrows)
         if key[pygame.K_a]:
             self.vel_x = -self.speed*dt 
             self.image_atual = self.images_left
@@ -120,8 +136,13 @@ class Player(pygame.sprite.Sprite):
         self.movimenta(self.vel_x, self.vel_y, boxes)
     
     def shootArrows(self, grupo_arrows):
-        grupo_arrows.add(arrowShot(self.rect.x, self.rect.y))
-        
+        if self.powered:
+            grupo_arrows.add(arrowShot(self.rect.x-32, self.rect.y))
+            grupo_arrows.add(arrowShot(self.rect.x, self.rect.y))
+            grupo_arrows.add(arrowShot(self.rect.x+32, self.rect.y))
+        else:
+            grupo_arrows.add(arrowShot(self.rect.x, self.rect.y))
+            
 
     def check_ground_collision(self, x, y, boxes):
         self.rect.move_ip([x,y])

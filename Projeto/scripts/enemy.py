@@ -81,6 +81,9 @@ class Base_enemy(pygame.sprite.Sprite):
 
         if collided:
             self.life -= 1
+            collided.kill()
+        
+        if self.life <= 0:
             self.kill()
 
         x = threading.Thread(target=self.movement, args=(grupo_bullet,))
