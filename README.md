@@ -42,6 +42,13 @@
 ## Demonstração
 [Aqui ficará uma demonstração do jogo (pode ser com gif, captura de tela...)]: #
 
+
+
+https://github.com/SeaCello/2023.2-UFPE-IP-Game/assets/125290781/e7d5fa9d-219c-4374-93c6-858c23b83f46
+
+
+
+
 [## Ambiente de Desenvolvimento]: #
 
 ## Créditos
