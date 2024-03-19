@@ -8,7 +8,8 @@ import level
 from level import *
 from enemy import *
 from item import *
-from final import *
+from loser import *
+from winner import *
 
 # pygame setup
 pygame.init()
@@ -69,9 +70,12 @@ class game():
         while self.running:
 
             for event in pygame.event.get():
-                if event.type == pygame.QUIT or heroi.life <= 0:
-                    final()
+                if event.type == pygame.QUIT:
                     self.running = False
+                elif heroi.life <= 0:
+                    final()
+                elif len(grupo_enemies) == 0:
+                    main()
             
             screen.blit(fundo_img, (0, 0))
             
