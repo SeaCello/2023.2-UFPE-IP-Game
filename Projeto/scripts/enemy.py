@@ -1,11 +1,8 @@
 #importando pygame e livraria necessaria
 import pygame
 from pygame.locals import *
-from default import *
 import threading
 import time
-import math
-import random
 
 pygame.init()
 
@@ -15,10 +12,10 @@ width_screen = 1280
 width = 1050
 height = 200
 cont = []
-shoot_cooldown = 5
 bullet_scale = 1.4
 bullet_speed = 10
 bullet_lifetime = 500
+shoot = False
 
 # Criar classe de inimigo
 enemy_img = pygame.image.load('Projeto/assets/R-Sheet-Sheet.png')
@@ -37,43 +34,53 @@ class Base_enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, x_change):
         #renderizando sprite
         pygame.sprite.Sprite.__init__(self)
+        self.speed = 10
         self.life = 2
-        self.shoot_cooldown = 0
-
-        #Variável que muda a direção do movimento da coruja
+        self.arrow_cooldown = 0
         self.x_change = x_change
-
+        self.images_down = []
+        self.images_up = []
         self.images_left = []
         self.images_right = []
-
         self.image_atual = []
+        self.shoot_cooldown = 900
+        self.last = 0
 
         for c in range(0, 256, 64):
+            left = load_crop_image(enemy_img, c, 96, 64, 64, False)
+            left = pygame.transform.scale(left, (48,96))
+            self.images_left.append(left)
+            
+            up = load_crop_image(enemy_img, c, 64, 64, 64, False)
+            up = pygame.transform.scale(up, (48,96))
+            self.images_up.append(up)
+            
             if c <= 128:
                 right = load_crop_image(enemy_img, c, 64, 64, 64, False)
                 right = pygame.transform.scale(right, (96,128))
                 self.images_right.append(right)
             
-            left = load_crop_image(enemy_img, c, 0, 64, 64, False)
-            left = pygame.transform.scale(left, (96,128))
-            self.images_left.append(left)
+            down = load_crop_image(enemy_img, c, 0, 64, 64, False)
+            down = pygame.transform.scale(down, (96,128))
+            self.images_down.append(down)
 
         self.i = 0
-        self.image_atual = self.images_left
+        self.image_atual = self.images_down
         self.image = self.image_atual[self.i]
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.pos_y_inicial = y
         self.rect.topleft = (x, y)
     
     def update(self, grupo_bullet, arrows):
         self.i += 0.20
-        if self.i >= len(self.images_left):
+        if self.i >= len(self.images_down):
             self.i = 0
-            self.image = self.images_left[int(self.i)]
+            self.image = self.images_down[int(self.i)]
         elif self.i >= len(self.images_right):
             self.i = 0
             self.image = self.images_right[int(self.i)]
+
+        self.image = self.image_atual[int(self.i)]
 
         self.image = self.image_atual[int(self.i)]
 
@@ -89,12 +96,10 @@ class Base_enemy(pygame.sprite.Sprite):
         x = threading.Thread(target=self.movement, args=(grupo_bullet,))
         x.start()
 
-        # self.colisao(arrows)
-
-        if self.shoot_cooldown > 0:
-            self.shoot_cooldown -= 1
+        if self.arrow_cooldown > 0:
+            self.arrow_cooldown -= 1
     
-    # Definir moviment
+    # Definir movimento do inimigo
     def movement(self, grupo_bullet):
         x = self.rect.x
         x_change = self.x_change
@@ -107,76 +112,50 @@ class Base_enemy(pygame.sprite.Sprite):
         if (x == 1000) and (len(cont) == 0):
             cont.append(1)
         elif (x == 1000) and (len(cont) > 0):
-            self.image_atual = self.images_left
-            time.sleep(2)
+            self.image_atual = self.images_down
+            time.sleep(1.5)
         elif x == 100 :
             self.image_atual = self.images_right
-            time.sleep(2)
+            time.sleep(1.5)
+        elif (self.rect.x > 105) and (self.rect.x < 995) :
+            now = pygame.time.get_ticks()
+            if now - self.last >= self.shoot_cooldown:
+                self.shootBullets(grupo_bullet)
+                self.last = now
 
         x += x_change
 
         self.rect.x = x
         self.x_change = x_change
 
-    #definindo colisao
-    # def colisao(self, arrows):
-    #     collided = pygame.sprite.spritecollideany(self, arrows)
-
-    #     if collided:
-    #         self.life -= 1
-    #         time.sleep(1)
-
-    #     return collided
-    
-    # #Função que realiza o tiro da coruja com base na sua posição e na do personagem
-    # def shoot(self, person_rect):
-    #     cateto_x = abs(self.rect.x - person_rect.x)
-    #     cateto_y = abs(self.rect.y - person_rect.y)
-    #     if cateto_x != 0:
-    #         tangente = cateto_y / cateto_x
-    #         angle = math.atan(tangente)*360/math.pi
-    #     else:
-    #         angle = 0
-    #     angle += random.randrange(-10, 10)
-    #     self.municao = 2
-    #     return angle
+    def shootBullets(self, grupo_bullet):
+        if self.x_change == 5:
+            grupo_bullet.add(enemyShot(self.rect.centerx, self.rect.centery))
+        elif self.x_change == -5:
+            grupo_bullet.add(enemyShot(self.rect.centerx, self.rect.centery))
 
 
-#definindo classe do tiro da coruja 
-bullet_image = pygame.image.load('Projeto/assets/bullet.png')
-class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, angle):
+enemy_bullet_image = pygame.image.load('Projeto/assets/bullet.png')
+class enemyShot(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
-        self.angle = angle
-        self.image = bullet_image
+        self.image = enemy_bullet_image
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.centerx = x
+        self.rect.centery = y
         self.x_vel = 0
         self.y_vel = 0
-        self.speed = 5
+        self.speed = 10
+    
+    def update(self, boxes):
+        self.rect.move_ip([0, self.speed])
 
-
-    def bullet_movement(self):
-        
-        self.x_vel = math.cos(self.angle * (2*math.pi/360)) * self.speed
-        self.y_vel = math.sin(self.angle * (2*math.pi/360)) * self.speed
-
-
-    def update(self):
-        self.bullet_movement()
-
-        self.rect.y += self.y_vel
-        self.rect.x += self.x_vel
+        if pygame.sprite.spritecollideany(self, boxes):
+            self.kill()
     
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-
-# Criar classe de inimigo
-# Inicializar valores
-# Renderizar sprite
-# Definir máscara de colisão
-# Definir movimento

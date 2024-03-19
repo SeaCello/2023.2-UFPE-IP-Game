@@ -80,7 +80,7 @@ def main_menu():
         menu_text = get_font(50).render("Uma Jornada Discreta", True, "#e4de20")
         menu_rect = menu_text.get_rect(center=(640, 100))
 
-        play_button = Button(pos=(640, 250), 
+        play_button = Button(pos=(640, 250),
                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
         options_button = Button(  pos=(640, 400), 
                             text_input="CRÉDITOS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")

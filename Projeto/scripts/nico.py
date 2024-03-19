@@ -74,7 +74,7 @@ class Player(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.topleft = (100, 500)
 
-    def update(self, boxes, life, arrows, powerups, grupo_arrows):
+    def update(self, boxes, life, arrows, powerups, grupo_arrows, grupo_bullet, grupo_enemies):
 
         dt = clock.tick(60) / 1000
 
@@ -87,6 +87,8 @@ class Player(pygame.sprite.Sprite):
         collisionLife = pygame.sprite.spritecollideany(self, life)
         collisionArrows = pygame.sprite.spritecollideany(self, arrows)
         collisionPowerups = pygame.sprite.spritecollideany(self, powerups)
+        collisionBullets = pygame.sprite.spritecollideany(self, grupo_bullet)
+        collisionEnemies = pygame.sprite.spritecollideany(self, grupo_enemies)
 
         if collisionLife:
             self.life += 1
@@ -98,6 +100,10 @@ class Player(pygame.sprite.Sprite):
             self.powered = True
             self.lastPower = pygame.time.get_ticks()
             collisionPowerups.kill()
+        if collisionBullets or collisionEnemies:
+            self.life -= 1
+            if self.life <= 0:
+                self.kill()
         
         if self.powered:
             nowPower = pygame.time.get_ticks()

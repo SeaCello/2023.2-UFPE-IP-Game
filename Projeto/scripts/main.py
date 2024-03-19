@@ -8,6 +8,7 @@ import level
 from level import *
 from enemy import *
 from item import *
+from final import *
 
 # pygame setup
 pygame.init()
@@ -20,14 +21,13 @@ fundo_img = pygame.image.load('Projeto/assets/imagem_de_fundo.jpg')
 heroi = Player()
 grupo_heroi = pygame.sprite.Group(heroi)
 
-enemy = Base_enemy(WIDTH, 100, 0)
-enemy2 = Base_enemy(WIDTH, 300, 0)
+enemy = Base_enemy(WIDTH, 200, 0)
+enemy2 = Base_enemy(WIDTH, 400, 0)
 grupo_enemies = pygame.sprite.Group()
 grupo_enemies.add(enemy)
+grupo_enemies.add(enemy2)
 
-bullet = Bullet(1000, 70, 45)
 grupo_bullet = pygame.sprite.Group()
-grupo_bullet.add(bullet)
 
 arrow = arrowShot(1280, 720)
 grupo_arrows = pygame.sprite.Group()
@@ -69,7 +69,8 @@ class game():
         while self.running:
 
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT or heroi.life <= 0:
+                    final()
                     self.running = False
             
             screen.blit(fundo_img, (0, 0))
@@ -85,18 +86,18 @@ class game():
 
             powerups.update(blocks)
             powerups.draw(screen)
+
+            grupo_bullet.update(blocks)
+            grupo_bullet.draw(screen)
             
             grupo_arrows.update(blocks)
             grupo_arrows.draw(screen)
             
-            grupo_heroi.update(blocks, life, arrows, powerups, grupo_arrows)
+            grupo_heroi.update(blocks, life, arrows, powerups, grupo_arrows, grupo_bullet, grupo_enemies)
             grupo_heroi.draw(screen)
 
             grupo_enemies.update(grupo_bullet, grupo_arrows)
             grupo_enemies.draw(screen)
-
-            grupo_bullet.update()
-            grupo_bullet.draw(screen)
 
             textLife = font.render("Vida: " + str(heroi.life), 1, (0,0,0))
             textArrows = font.render("Flechas: " + str(heroi.arrows), 1, (0,0,0))
