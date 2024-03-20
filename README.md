@@ -2,16 +2,25 @@
 
     Este é um jogo criado para a cadeira de Introdução a Programação do curso de Ciência da
     Computação da Universidade Federal de Pernambuco (UFPE).
-[escrever a história do game]: #
 
     Este projeto trata-se de criar um jogo estilo plataforma utilizando a linguagem de
     programação Python 3, com a implementação da POO. 
+
+## Instruções para iniciar o jogo
+    Primeiramente, abra o seu terminal no computador, e inicie o git (git init). Após isso,
+    execute o comando "git clone https://github.com/SeaCello/2023.2-UFPE-IP-Game.git". Feito
+    isso, abra o VS code na pasta onde você clonou o repositório, vá no script menu.py, e
+    rode o código (é importante ressaltar que para que o jogo funcione, você deve ter instaladas
+    em seu dispositivo as bibliotecas do python "Pygame" e "Numpy").
+    
 ### Enredo:
     O jogo é sobre Nico, um aluno do CIn,  que está tentando aprender Matemática Discreta.
     Nessa jornada, ele conhece o seu mentor, Vanin, que o está guiando para se tornar um 
     mestre Discreto. Como desafio final, ele precisa visitar o mundo espiritual para derrotar
     as corujas do conhecimento e, assim, se tornar um mestre discreto. O jogo se passa após o
     nosso protagonista Nico adentrar o mundo espiritual.
+
+
     
 
 
