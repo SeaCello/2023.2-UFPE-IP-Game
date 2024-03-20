@@ -39,11 +39,11 @@
 ## Arquitetura do projeto
 ### Como o código foi organizado:
     Dentro da pasta do projeto do jogo, subdividimos em outras duas pastas, são elas: assets e scripts.
-    - Assets
+    * Assets
     Dentro dessa pasta nós adicionamos diversos arquivos que utilizamos dentro do jogo, sejam eles
     arquivos png, jpg, ttf (fontes).
 
-    - Scripts
+    * Scripts
     Aqui ficam os códigos para a criação do game, que ficaram subdivididos em vários scripts, são eles:
     button.py, default.py, enemy.py, final.py, finalizacao.py, item.py, level.py, main.py, menu.py,
     nico.py.
@@ -65,13 +65,13 @@
 ## Demonstração
 [Aqui ficará uma demonstração do jogo (pode ser com gif, captura de tela...)]: #
 
-Vídeo do player ganhando:
+* Vídeo do player ganhando:
 
 
 https://github.com/SeaCello/2023.2-UFPE-IP-Game/assets/125290781/18f1d885-4d6a-494f-8595-9c1689404787
 
 
-Vídeo do player perdendo:
+* Vídeo do player perdendo:
 
 
 
@@ -88,6 +88,17 @@ https://github.com/SeaCello/2023.2-UFPE-IP-Game/assets/125290781/20f26b94-a732-4
  [ficarão também inspirações utilizadas para realizar o game (nesse caso nivan seria uma das inspirações)]: #
     para a criação desse jogo foi utilizada a linguagem de programação Python 3, com o pygame e 
     numpy sendo as principais bibliotecas utilizadas para o desenvolvimento do game.
+
+## Conceitos provenientes da disciplina de IP
+
+    Além da POO, foram utilizados diversos conceitos vistos durante as aulas da disciplina,
+    entre eles:
+    * Laços condicionais: utilizados no código inteiro para construir a lógica do jogo;
+    * Laços de repetição: também foram utilizados diversas vezes para construir a lógica do jogo;
+    * Listas: utilizadas para fazer o estágio;
+    * Tuplas: utilizadas em basicamente todos os scripts.
+    * Funções: utilizadas o tempo inteiro, são de suma importância para que se possa trabalhar com
+    uma multiplicidade de scripts.
 
 ## Desafios e erros
     * Maior erro cometido durante o projeto e como contornamos: 
