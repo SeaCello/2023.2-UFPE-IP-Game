@@ -56,9 +56,19 @@
 ## Demonstração
 [Aqui ficará uma demonstração do jogo (pode ser com gif, captura de tela...)]: #
 
+Vídeo do player ganhando:
 
 
-https://github.com/SeaCello/2023.2-UFPE-IP-Game/assets/125290781/23288aaa-f89f-4fea-a387-2fc38d89eea5
+https://github.com/SeaCello/2023.2-UFPE-IP-Game/assets/125290781/18f1d885-4d6a-494f-8595-9c1689404787
+
+
+Vídeo do player perdendo:
+
+
+
+
+https://github.com/SeaCello/2023.2-UFPE-IP-Game/assets/125290781/20f26b94-a732-4fd6-8ea3-912e96c68597
+
 
 
 
