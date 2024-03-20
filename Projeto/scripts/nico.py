@@ -44,6 +44,7 @@ class Player(pygame.sprite.Sprite):
         self.powered = False
         self.lastPower = 0
         self.cooldownPower = 5000
+        self.jump_sound = pygame.mixer.Sound('Projeto/assets/SFX_Jump_02.wav')
 
         for c in range(0, 64, 16):
             left = load_crop_image(personagem, c, 96, 16, 20, False)
@@ -116,6 +117,8 @@ class Player(pygame.sprite.Sprite):
         if key[pygame.K_w] and colidiu:
             self.vel_y = -self.jumpSpeed*dt
             self.image_atual = self.images_jump_right
+            self.jump_sound.play(1)
+            self.jump_sound.set_volume(0.1)
         if key[pygame.K_SPACE] and self.arrows > 0:
             nowArrow = pygame.time.get_ticks()
             if nowArrow - self.lastArrow >= self.cooldownArrow:

@@ -12,7 +12,7 @@ from loser import *
 from winner import *
 
 # pygame setup
-pygame.init()
+# pygame.init()
 font = pygame.font.Font("Projeto/assets/font.ttf", 30)
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
@@ -60,7 +60,10 @@ class game():
         self.running = True
 
     def play(self):
-        pygame.init()
+        pygame.mixer.pause()
+        pygame.mixer.music.load('Projeto/assets/Música fase 1.mp3')
+        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.play(-1)
         
         pygame.display.set_caption("Uma Jornada Discreta")
 
