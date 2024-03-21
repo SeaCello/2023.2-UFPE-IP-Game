@@ -38,7 +38,7 @@ class Base_enemy(pygame.sprite.Sprite):
         self.life = 2
         self.arrow_cooldown = 0
         self.x_change = x_change
-        self.images_down = []
+        self.images_left = []
         self.images_up = []
         self.images_left = []
         self.images_right = []
@@ -46,26 +46,18 @@ class Base_enemy(pygame.sprite.Sprite):
         self.shoot_cooldown = 900
         self.last = 0
 
-        for c in range(0, 256, 64):
-            left = load_crop_image(enemy_img, c, 96, 64, 64, False)
-            left = pygame.transform.scale(left, (48,96))
-            self.images_left.append(left)
-            
-            up = load_crop_image(enemy_img, c, 64, 64, 64, False)
-            up = pygame.transform.scale(up, (48,96))
-            self.images_up.append(up)
-            
+        for c in range(0, 256, 64):    
             if c <= 128:
                 right = load_crop_image(enemy_img, c, 64, 64, 64, False)
                 right = pygame.transform.scale(right, (96,128))
                 self.images_right.append(right)
             
-            down = load_crop_image(enemy_img, c, 0, 64, 64, False)
-            down = pygame.transform.scale(down, (96,128))
-            self.images_down.append(down)
+            left = load_crop_image(enemy_img, c, 0, 64, 64, False)
+            left = pygame.transform.scale(left, (96,128))
+            self.images_left.append(left)
 
         self.i = 0
-        self.image_atual = self.images_down
+        self.image_atual = self.images_left
         self.image = self.image_atual[self.i]
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
@@ -73,9 +65,9 @@ class Base_enemy(pygame.sprite.Sprite):
     
     def update(self, grupo_bullet, arrows):
         self.i += 0.20
-        if self.i >= len(self.images_down):
+        if self.i >= len(self.images_left):
             self.i = 0
-            self.image = self.images_down[int(self.i)]
+            self.image = self.images_left[int(self.i)]
         elif self.i >= len(self.images_right):
             self.i = 0
             self.image = self.images_right[int(self.i)]
@@ -112,7 +104,7 @@ class Base_enemy(pygame.sprite.Sprite):
         if (x == 1000) and (len(cont) == 0):
             cont.append(1)
         elif (x == 1000) and (len(cont) > 0):
-            self.image_atual = self.images_down
+            self.image_atual = self.images_left
             time.sleep(1.5)
         elif x == 100 :
             self.image_atual = self.images_right

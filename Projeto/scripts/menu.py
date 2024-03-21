@@ -1,5 +1,6 @@
 import pygame, sys
 from button import Button
+
 class menu():
     def __init__(self):
         pygame.init()

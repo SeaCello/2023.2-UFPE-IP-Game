@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
 
         self.jumpSpeed = 1200
         self.arrows = 0
-        self.life = 3
+        self.life = 20
         self.speed = 300
         self.vel_x = 0
         self.vel_y = 0
@@ -45,6 +45,8 @@ class Player(pygame.sprite.Sprite):
         self.lastPower = 0
         self.cooldownPower = 5000
         self.jump_sound = pygame.mixer.Sound('Projeto/assets/SFX_Jump_02.wav')
+        self.arrow_sound = pygame.mixer.Sound('Projeto/assets/Som de flechas.ogg')
+        self.damage_sound = pygame.mixer.Sound('Projeto/assets/Som de dano.mp3')
 
         for c in range(0, 64, 16):
             left = load_crop_image(personagem, c, 96, 16, 20, False)
@@ -102,6 +104,7 @@ class Player(pygame.sprite.Sprite):
             self.lastPower = pygame.time.get_ticks()
             collisionPowerups.kill()
         if collisionBullets or collisionEnemies:
+            self.damage_sound.play(0)
             self.life -= 1
             if self.life <= 0:
                 self.kill()
@@ -117,7 +120,7 @@ class Player(pygame.sprite.Sprite):
         if key[pygame.K_w] and colidiu:
             self.vel_y = -self.jumpSpeed*dt
             self.image_atual = self.images_jump_right
-            self.jump_sound.play(1)
+            self.jump_sound.play(0)
             self.jump_sound.set_volume(0.1)
         if key[pygame.K_SPACE] and self.arrows > 0:
             nowArrow = pygame.time.get_ticks()
@@ -125,6 +128,8 @@ class Player(pygame.sprite.Sprite):
                 self.lastArrow = nowArrow
                 self.arrows -= 1
                 self.shootArrows(grupo_arrows)
+                self.arrow_sound.play(0)
+                self.arrow_sound.set_volume(0.3)
         if key[pygame.K_a]:
             self.vel_x = -self.speed*dt 
             self.image_atual = self.images_left
